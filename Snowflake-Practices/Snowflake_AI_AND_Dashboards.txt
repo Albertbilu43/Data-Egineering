@@ -1,0 +1,809 @@
+1 USE AI to analyze data using agents
+
+2 Create Dashboard
+
+
+--------------------------------------------------1 Use AI to analyze data using agents------------------------------------------------------
+--------------------------------------------------1 Use AI to analyze data using agents------------------------------------------------------
+ 
+Use AI Agent to get charts through conversation
+
+Cortex Analyst: is a self-service for data analysis through conversation
+Stage:  is a container for files. Like Volume in Databricks
+
+
+
+1 Create a DatBase, Warehouse, Schema, Stage
+  https://www.youtube.com/watch?v=xFdQmDlXmDI&list=PLiFErliE7g4XLTRzStzh2Eh2voqDkfuIq&index=4
+
+-----DELETE THIS BELOW------------
+  db:                   cortex_analyst_tutorial
+  schema:               cortex_analyst
+  stage:                cortex_analyst_tutorial.cortex_analyst.CORTEX_ANALYST_MODEL_STAGE
+  xtra small warehose:  cortex_analyst_tutorial_warehouse
+  table:                cortex_analyst_tutorial.cortex_analyst..match_schedule
+-----DELETE THIS ABOVE------------
+
+DO NOT DROP THE PUBLIC SCHEMA!!!!  IGNORE THAT DIRECTION FROM THE VIDEO
+
+
+ Projects/Workspcae/Add New/ SQL File  name it setup
+ 
+ Inside the file I need to Change the role to system admin. 
+    a) Chose the database (db_social) and schema(public)
+    b) run the code to create a stage and enable the directory
+
+
+
+
+2 Create a Cortex Analyst
+  a)  AI & ML / Analyst/Create New/Create New Semantic View
+  b) 
+  c) Use rol a Account admin
+  d) Location: database.schema
+  e) clikck on queries
+  f) add a question. This question is the one a user would then type for the chatbot to generate a chart
+  g) Paste teh query for the Second Section/third chart Infleucner collab video views 
+  h) Click Add
+  i) Select the databse nd table
+  j) select all needed columns
+  k) Create and Save
+  l) The model displays now in the Preview/Suggestions/Playground section on the right side
+  m) Click on  the Playground and type at the the prompt (bottom)  your search "Make a chart to get the video views for influencer collab campaign"
+  n) If the result or teh query is not waht you want then remove the query and paste the correct sql query. Click verified query 
+  o) Top-Right SAVE
+
+
+________________________
+()()()) To create a semandtic model follow these steps ()()()()
+
+  a)  AI & ML / Analyst/Create New/Create New Semantic Model
+  b) Use rol a system admin
+  c) select database and schema
+  d) select Stage
+  e) Name it  and add description
+  f) Next and select SQL queries
+  g) select all the needed tables
+  h) select all needed columns
+  i) Create and Save
+  j) The model displays now in the Preview/Suggestions/Playground section on the right side
+ 
+________________________
+
+
+3 Create an AGENT that uses that Cortex Analyst we just created 
+
+
+  In tab "About"
+  a) AI & ML /Agents /Create Agent
+  b) Seect database and schema
+  c) name it 
+  d) Create Agent 
+  e) Add a dedcription on what to use this agent for
+  f) Add a question you would use to get that data
+
+  In tab "Tools"
+  g) Cortex analyst select "+Add"
+  h) Semantic View
+  i) Database and achema
+  j) Select the dortex analyst we created for this agent
+  k) Name and description of that agent
+  l) Enter teh question again 
+  m) Save on teh top right
+
+
+_______________________
+
+  Open teh AI to get these charts 
+ a) AI & ML / Snowflake intelligence
+    Type you question:
+
+    Example: Show me the main metrics for the social networks
+
+  b) To share any of these les open the agent
+  c) On th top-right. Click on Copy Preview Link 
+     https://ai.snowflake.com/yewvcnb/fnb80516/#/ai/chat/new?db=DB_SOCIAL&schema=PUBLIC&agent=DASHBOARDMAKERTEST2
+
+
+
+ <<<<< Use the SQL code for Chart three from Second section >>>>>>
+
+ 
+
+
+
+
+
+
+
+
+
+
+Create a dashboard for Social Networks 
+
+The dashboard should focus in these two categories: Spend and conversions
+
+1 Use the file  xxxxx.csv file and the next SQL queries. 
+2 Divide the dashboard in 4 sections. Each section is a row 
+
+---------------------------------------------------------Create a Dashboard-------------------------------------------------------------------
+---------------------------------------------------------Create a Dashboard-------------------------------------------------------------------
+
+------------------
+The first section/row is a table with 7 columns and 3 rows of data. 
+------------------
+
+  Use this heading "Main Metrics by Network" for the table.
+  Aling the columns of the table from left-to-right in the following order.
+  NETWORK  SPEND   IMPRESSIONS  CLICKS   CONVERSIONS   VIDEO   VIEWS   REACH
+   Order them descending by SPEND
+ 
+SELECT DISTINCT  CASE (campaign_id) 
+                     WHEN  'fb_1001' Then 'FACEBOOK'
+                     WHEN  'fb_1002' Then 'FACEBOOK'
+                     WHEN  'fb_1003' Then 'FACEBOOK'
+                     WHEN  'fb_1004' Then 'FACEBOOK'
+                     WHEN  'g_5001'  Then 'GOOGLE'
+                     WHEN  'g_5002'  Then 'GOOGLE'
+                     WHEN  'g_5003'  Then 'GOOGLE'
+                     WHEN  'g_5004'  Then 'GOOGLE'   
+                     WHEN  'tt_8001' Then 'TIKTOK'
+                     WHEN  'tt_8002' Then 'TIKTOK'
+                     WHEN  'tt_8003' Then 'TIKTOK'
+                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                     ELSE campaign_id
+
+                     END AS SOC_NETWORK
+                     
+              ,SUM(SPEND)	    AS SPEND
+              ,SUM(impressions) AS impressions
+              ,SUM(clicks)	    AS clicks
+              ,SUM(conversions)	AS conversions
+              ,SUM(video_views) AS video_views
+              ,SUM(reach) AS reach
+   
+FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+--WHERE campaign_id = 'fb_1001'
+GROUP BY    CASE (campaign_id) 
+                     WHEN  'fb_1001' Then 'FACEBOOK'
+                     WHEN  'fb_1002' Then 'FACEBOOK'
+                     WHEN  'fb_1003' Then 'FACEBOOK'
+                     WHEN  'fb_1004' Then 'FACEBOOK'
+                     WHEN  'g_5001'  Then 'GOOGLE'
+                     WHEN  'g_5002'  Then 'GOOGLE'
+                     WHEN  'g_5003'  Then 'GOOGLE'
+                     WHEN  'g_5004'  Then 'GOOGLE'   
+                     WHEN  'tt_8001' Then 'TIKTOK'
+                     WHEN  'tt_8002' Then 'TIKTOK'
+                     WHEN  'tt_8003' Then 'TIKTOK'
+                     WHEN  'tt_8004' Then 'TIKTOK'                       
+                     ELSE campaign_id
+
+                     END
+ ORDER BY SPEND DESC
+;
+
+
+
+------------------
+The second section/row contains 4 bar charts:
+------------------
+  Align them from left-to-right in the following order.
+
+
+ Chart one: Stacked bar 
+            for the three networks Facebook, Google and Tiktok with title "Networks Spend vs Conversions"
+   	    Uses two metrics; Spend in the y-axis  vs Conversions in the x-axis one bar for each network
+   	    Ordered ascending by bar size
+
+SELECT DISTINCT  campaign_id	, AD_GROUP_NAME  
+              , CASE (campaign_id) 
+                     WHEN  'fb_1001' Then 'FACEBOOK'
+                     WHEN  'fb_1002' Then 'FACEBOOK'
+                     WHEN  'fb_1003' Then 'FACEBOOK'
+                     WHEN  'fb_1004' Then 'FACEBOOK'
+                     WHEN  'g_5001'  Then 'GOOGLE'
+                     WHEN  'g_5002'  Then 'GOOGLE'
+                     WHEN  'g_5003'  Then 'GOOGLE'
+                     WHEN  'g_5004'  Then 'GOOGLE'   
+                     WHEN  'tt_8001' Then 'TIKTOK'
+                     WHEN  'tt_8002' Then 'TIKTOK'
+                     WHEN  'tt_8003' Then 'TIKTOK'
+                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                     ELSE campaign_id
+
+                     END AS SOC_NETWORK
+                     
+              ,SUM(SPEND)	    AS SPEND
+              ,SUM(impressions) AS impressions
+              ,SUM(clicks)	    AS clicks
+              ,SUM(conversions)	AS conversions
+   
+FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+--WHERE campaign_id = 'fb_1001'
+GROUP BY  campaign_id, AD_GROUP_NAME
+                    ,  CASE (campaign_id) 
+                     WHEN  'fb_1001' Then 'FACEBOOK'
+                     WHEN  'fb_1002' Then 'FACEBOOK'
+                     WHEN  'fb_1003' Then 'FACEBOOK'
+                     WHEN  'fb_1004' Then 'FACEBOOK'
+                     WHEN  'g_5001'  Then 'GOOGLE'
+                     WHEN  'g_5002'  Then 'GOOGLE'
+                     WHEN  'g_5003'  Then 'GOOGLE'
+                     WHEN  'g_5004'  Then 'GOOGLE'   
+                     WHEN  'tt_8001' Then 'TIKTOK'
+                     WHEN  'tt_8002' Then 'TIKTOK'
+                     WHEN  'tt_8003' Then 'TIKTOK'
+                     WHEN  'tt_8004' Then 'TIKTOK'                       
+                     ELSE campaign_id
+
+                     END
+
+;
+
+
+Chart two: horizontal bar chart
+   	    for Tiktok network with the title "Tiktok Top Two Strategies"
+      	    for the CAMPAIGN_NAME 'Influencer_Collab' and "Conversion_Focus" with Week in the y-axis and Spend in the x-axis.
+      	    Ordered descending by bar size
+
+WITH AD_SPND_RANK AS ( SELECT CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND                        
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'TIKTOK'
+                       GROUP BY  CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     ),
+    TOP_AD_SPND_RK AS( SELECT R.*, DENSE_RANK() OVER(PARTITION BY SOC_NETWORK ORDER BY SPEND DESC) AS RNK
+                        FROM AD_SPND_RANK AS R
+                        
+                     )             
+                  
+SELECT CAMPAIGN_NAME, SOC_NETWORK, SPEND, RNK AS TOP
+FROM TOP_AD_SPND_RK AS R
+WHERE RNK IN (1,2)
+
+;
+
+
+
+
+
+Chart three: horizontal bar chart 
+             for Tiktok network with the title "Influencer Collab Video Vews" 
+             for the CAMPAIGN_NAME 'Influencer_Collab' with Week in the y-axis and Video Views in the x-axis.
+             Ordered descending by bar size
+
+WITH AD_SPND_RANK2 AS ( SELECT EXTRACT( WEEK FROM DATE) AS WEEK
+                             ,CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND
+                             , SUM(VIDEO_VIEWS) AS VIDEO_VIEWS                         
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'TIKTOK'
+                       GROUP BY  EXTRACT( WEEK FROM DATE)
+                                ,CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     )        
+                  
+SELECT WEEK, CAMPAIGN_NAME, VIDEO_VIEWS
+FROM AD_SPND_RANK2 AS R
+WHERE CAMPAIGN_NAME IN ('Influencer_Collab') --'Conversion_Focus'
+
+;
+
+
+
+
+
+ Chart four: horizontal bar chart 
+             for Tiktok network  with the title "Conversion Focus Video Views" 
+             for the CAMPAIGN_NAME 'Conversion_Focus' with Week in the y-axis and Video Views in the x-axis.
+             Ordered descending by bar size
+
+
+WITH AD_SPND_RANK2 AS ( SELECT EXTRACT( WEEK FROM DATE) AS WEEK
+                             ,CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND
+                             , SUM(VIDEO_VIEWS) AS VIDEO_VIEWS                         
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'TIKTOK'
+                       GROUP BY  EXTRACT( WEEK FROM DATE)
+                                ,CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     )        
+                  
+SELECT WEEK, CAMPAIGN_NAME, VIDEO_VIEWS
+FROM AD_SPND_RANK2 AS R
+WHERE CAMPAIGN_NAME IN ('Conversion_Focus') --'Influencer_Collab') --
+
+;
+
+
+
+
+---------------------------
+The third section/row contains 4 bar charts:
+---------------------------
+
+  Align them from left-to-right in the following order.
+
+
+ Chart one: A placecholder with no data
+
+
+ Chart two: horizontal bar chart 
+            for Google network with the title "Google top two strategies" 
+            for the CAMPAIGN_NAME 'Search_Generic_Terms' and 'Shopping_All_Products' with Week in the y-axis and Spend in the x-axis.
+            Ordered descending by bar size
+
+WITH AD_SPND_RANK AS ( SELECT CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND                        
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'GOOGLE'
+                       GROUP BY  CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     ),
+    TOP_AD_SPND_RK AS( SELECT R.*, DENSE_RANK() OVER(PARTITION BY SOC_NETWORK ORDER BY SPEND DESC) AS RNK
+                        FROM AD_SPND_RANK AS R
+                        
+                     )             
+                  
+SELECT CAMPAIGN_NAME, SOC_NETWORK, SPEND, RNK AS TOP
+FROM TOP_AD_SPND_RK AS R
+WHERE RNK IN (1,2)
+
+;
+
+
+
+
+
+ Chart three:  horizontal bar chart 
+               for Google network with the title "Search Generic Terms Impressions by week" 
+               for the CAMPAIGN_NAME 'Search_Generic_Terms' with Week in the y-axis and Impressions in the x-axis.
+               Ordered descending by bar size
+WITH AD_SPND_RANK2 AS ( SELECT EXTRACT( WEEK FROM DATE) AS WEEK
+                             ,CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND
+                             , SUM(IMPRESSIONS) AS IMPRESSIONS                         
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'GOOGLE'
+                       GROUP BY  EXTRACT( WEEK FROM DATE)
+                                ,CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     )        
+                  
+SELECT WEEK, CAMPAIGN_NAME, IMPRESSIONS
+FROM AD_SPND_RANK2 AS R
+WHERE CAMPAIGN_NAME IN ('Search_Generic_Terms') --'Shopping_All_Products'
+
+;
+
+
+
+
+
+
+ Chart four:  horizontal bar chart 
+              for Google network with the title "Shopping All Products Impressions by week" 
+              for the CAMPAIGN_NAME 'Shopping_All_Products' with Week in the y-axis and Impressions in the x-axis.
+              Ordered descending by bar size
+
+WITH AD_SPND_RANK2 AS ( SELECT EXTRACT( WEEK FROM DATE) AS WEEK
+                             ,CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND
+                             , SUM(IMPRESSIONS) AS IMPRESSIONS                         
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'GOOGLE'
+                       GROUP BY  EXTRACT( WEEK FROM DATE)
+                                ,CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     )        
+                  
+SELECT WEEK, CAMPAIGN_NAME, IMPRESSIONS
+FROM AD_SPND_RANK2 AS R
+WHERE CAMPAIGN_NAME IN ('Shopping_All_Products') --'Shopping_All_Products'
+
+;
+
+
+
+
+
+-----------------------------
+The fourth section/row contains 4 bar charts:
+-----------------------------
+
+  Align them from left-to-right in the following order.
+
+ Chart one:  A placecholder with no data
+
+
+
+ Chart two:  horizontal bar chart 
+             for Facebook network with the title "Facebook top two strategies" 
+             for the CAMPAIGN_NAME 'Conversions_Retargeting' and 'Traffic_Drive_Jan' with Week in the y-axis and Spend in the x-axis.
+             Ordered descending by bar size
+WITH AD_SPND_RANK AS ( SELECT CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND                        
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'FACEBOOK'
+                       GROUP BY  CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     ),
+    TOP_AD_SPND_RK AS( SELECT R.*, DENSE_RANK() OVER(PARTITION BY SOC_NETWORK ORDER BY SPEND DESC) AS RNK
+                        FROM AD_SPND_RANK AS R
+                        
+                     )             
+                  
+SELECT CAMPAIGN_NAME, SOC_NETWORK, SPEND, RNK AS TOP
+FROM TOP_AD_SPND_RK AS R
+WHERE RNK IN (1,2)
+
+;
+
+
+
+
+
+ Chart three:  horizontal bar chart 
+               for Google network with the title "Comversions Retargeting Impressions" 
+               with Week in the y-axis and Impressions in the x-axis.
+               Ordered descending by bar size
+
+WITH AD_SPND_RANK2 AS ( SELECT EXTRACT( WEEK FROM DATE) AS WEEK
+                             ,CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND
+                             , SUM(IMPRESSIONS) AS IMPRESSIONS                         
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'GOOGLE'
+                       GROUP BY  EXTRACT( WEEK FROM DATE)
+                                ,CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     )        
+                  
+SELECT WEEK, CAMPAIGN_NAME, IMPRESSIONS
+FROM AD_SPND_RANK2 AS R
+WHERE CAMPAIGN_NAME IN ('Search_Generic_Terms') --'Shopping_All_Products'
+
+;
+
+
+
+
+
+
+ Chart four:  horizontal bar chart 
+              for Google network with the title "Traffic Drive Jan Impressions by week" 
+              for the CAMPAIGN_NAME 'Traffic_Drive_Jan' with Week in the y-axis and Impressions in the x-axis.
+              Ordered descending by bar size
+
+WITH AD_SPND_RANK2 AS ( SELECT EXTRACT( WEEK FROM DATE) AS WEEK
+                             ,CAMPAIGN_ID, CAMPAIGN_NAME              
+                             ,CASE (campaign_id) 
+                              WHEN  'fb_1001' Then 'FACEBOOK'
+                              WHEN  'fb_1002' Then 'FACEBOOK'
+                              WHEN  'fb_1003' Then 'FACEBOOK'
+                              WHEN  'fb_1004' Then 'FACEBOOK'
+                              WHEN  'g_5001'  Then 'GOOGLE'
+                              WHEN  'g_5002'  Then 'GOOGLE'
+                              WHEN  'g_5003'  Then 'GOOGLE'
+                              WHEN  'g_5004'  Then 'GOOGLE'   
+                              WHEN  'tt_8001' Then 'TIKTOK'
+                              WHEN  'tt_8002' Then 'TIKTOK'
+                              WHEN  'tt_8003' Then 'TIKTOK'
+                              WHEN  'tt_8004' Then 'TIKTOK'                      
+                              ELSE campaign_id
+
+                             END AS SOC_NETWORK 
+                     
+                             , SUM(SPEND) AS SPEND
+                             , SUM(IMPRESSIONS) AS IMPRESSIONS                         
+                             
+                       FROM "DB_SOCIAL"."PUBLIC"."MERGED_SOC_ADS"
+                       WHERE SOC_NETWORK = 'FACEBOOK'
+                       GROUP BY  EXTRACT( WEEK FROM DATE)
+                                ,CAMPAIGN_NAME, CAMPAIGN_ID                     
+                                ,CASE (campaign_id) 
+                                     WHEN  'fb_1001' Then 'FACEBOOK'
+                                     WHEN  'fb_1002' Then 'FACEBOOK'
+                                     WHEN  'fb_1003' Then 'FACEBOOK'
+                                     WHEN  'fb_1004' Then 'FACEBOOK'
+                                     WHEN  'g_5001'  Then 'GOOGLE'
+                                     WHEN  'g_5002'  Then 'GOOGLE'
+                                     WHEN  'g_5003'  Then 'GOOGLE'
+                                     WHEN  'g_5004'  Then 'GOOGLE'   
+                                     WHEN  'tt_8001' Then 'TIKTOK'
+                                     WHEN  'tt_8002' Then 'TIKTOK'
+                                     WHEN  'tt_8003' Then 'TIKTOK'
+                                     WHEN  'tt_8004' Then 'TIKTOK'                      
+                                     ELSE campaign_id
+                                     END
+                     
+                                    ORDER BY SPEND DESC
+                     )        
+                  
+SELECT WEEK, CAMPAIGN_NAME, IMPRESSIONS
+FROM AD_SPND_RANK2 AS R
+WHERE CAMPAIGN_NAME IN ('Traffic_Drive_Jan') --'Shopping_All_Products'
+
+;
+
+
+
+
+
+
+

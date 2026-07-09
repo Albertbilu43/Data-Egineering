@@ -1,0 +1,146 @@
+
+
+
+---------------------------------Source: https://www.youtube.com/watch?v=3BrL5S8Xg2s--------------------------------
+
+
+
+--------------------------------------------------VIEWS------------------------------------------------------
+
+-- 2. Create the view
+	CREATE OR REPLACE VIEW it_employees AS 
+        SELECT * 
+        FROM employees;
+
+    TOP-LEFT
+    4 Hit the play button to run the code
+
+    Rename the file
+    5 Rename this file as 'create_view'
+
+
+	Types: Standard, Secure, Materialized
+
+        Standard:  act as saved, virtual SQL queries without storing physical data. 
+        Materialized: precompute and store query results to accelerate heavy, frequent reads. 
+        Secure: obscure underlying definitions and protect sensitive data from unauthorized users 
+
+
+Here is how the view types compare:
+
+1. Standard Views (Non-Materialized)
+
+Standard views are virtual representations of data. They do not store any data physically; every time you query a standard view, Snowflake executes the underlying SQL statement against the base tables in real time.
+
+* Use Case: Best for reusability, simplifying complex queries, and applying logical filters.
+* Storage & Maintenance: None required.
+* Performance: Varies; queries run fresh against base tables and allow for full query optimizations (e.g., predicate pushdown).
+
+
+
+2. Secure ViewsBoth standard and materialized views can be defined as secure views by adding the SECURE keyword. Secure views are intentionally designed for data privacy, data sharing, and ensuring compliance.
+
+* Use Case: Best for limiting access to sensitive data (e.g., hiding columns or applying row-level filtering) when exposing data to unauthorized users or external organizations.
+
+* Key Feature: The internal view definition (DDL) and structural details are hidden from unauthorized users. Only the authorized owner can view the underlying SQL code.
+
+* Performance: Because Snowflake skips certain query optimization paths to prevent indirect data leaks, standard secure views may execute slower than non-secure ones
+
+
+3. Materialized Views
+
+Unlike standard views, materialized views precompute the results of a query and physically store them as a distinct database object. Snowflake automatically keeps the data updated in the background as base tables change.
+
+* Use Case: Best for large-scale, frequent queries involving heavy aggregations, projections, or selections where query performance is critical.
+
+* Storage & Maintenance: They consume storage space and rely on Snowflake serverless compute credits for background maintenance. 
+
+* Limitations: They cannot be used with standard DML operations (INSERT, UPDATE, DELETE) directly on the view, and they do not support Time Travel.
+
+
+
+
+--------------------------------------------------- FIRST QUERY -----------------------------------------------------
+
+#This table is empty 
+SELECT * FROM it_employees;
+
+
+
+---------------------------------HEADER HEADER HEADER HEADER HEADER HEADER HEADER HEADER ------------------------------
+
+---------------------------------HEADER HEADER HEADER HEADER HEADER HEADER HEADER HEADER ------------------------------
+
+---------------------------------HEADER HEADER HEADER HEADER HEADER HEADER HEADER HEADER ------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------OTHER CODE TO USE FOR CREATING TABLES                   ------------------------------
+
+CREATE TABLE snow_db.schema1.table1 AS (
+
+SELECT
+	DATE ,
+	CAMPAIGN_ID ,
+	CAMPAIGN_NAME ,
+	AD_SET_NAME AS AD_GROUP_NAME,
+	IMPRESSIONS ,
+	CLICKS ,
+	SPEND ,
+	CONVERSIONS ,
+    NULL AS "conversion_value" ,
+	VIDEO_VIEWS ,
+	ENGAGEMENT_RATE,
+	REACH ,
+	(CLICKS/IMPRESSIONS * 100.0) AS "CTR"
+  FROM DB_SOCIAL.PUBLIC.FACEBOOK_ADS  
+  
+  UNION
+  SELECT	DATE ,
+	CAMPAIGN_ID ,
+	CAMPAIGN_NAME ,
+	AD_GROUP_NAME,
+	IMPRESSIONS ,
+	CLICKS ,
+	COST AS SPEND ,
+	CONVERSIONS ,
+    conversion_value ,
+	NULL AS "VIDEO_VIEWS" ,
+	(CLICKS/IMPRESSIONS) AS ENGAGEMENT_RATE,
+	NULL AS REACH ,
+	CTR
+  FROM DB_SOCIAL.PUBLIC.GOOGLE_ADS 
+    
+  UNION
+    
+  SELECT 	DATE ,
+	CAMPAIGN_ID ,
+	CAMPAIGN_NAME ,
+	ADGROUP_NAME AS AD_GROUP_NAME,
+	IMPRESSIONS ,
+	CLICKS ,
+	COST AS SPEND ,
+	CONVERSIONS ,
+    NULL AS "conversion_value",
+	VIDEO_VIEWS ,
+	(CLICKS/IMPRESSIONS) AS ENGAGEMENT_RATE,
+	NULL AS REACH ,
+	(CLICKS/IMPRESSIONS * 100.0) AS "CTR"
+  FROM DB_SOCIAL.PUBLIC.TIKTOK_ADS 
+);
+
+
+

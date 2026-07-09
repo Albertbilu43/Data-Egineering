@@ -1,0 +1,99 @@
+
+
+
+---------------------------------Source: https://www.youtube.com/watch?v=3BrL5S8Xg2s--------------------------------
+
+
+
+--------------------------------------------------VIEWS------------------------------------------------------
+
+-- 2. Create the view
+	CREATE OR REPLACE VIEW it_employees AS 
+        SELECT * 
+        FROM employees;
+
+--------------------------------------------------- FIRST QUERY -----------------------------------------------------
+
+#This table is empty 
+SELECT * FROM it_employees;
+SELECT * FROM mv_it_employees;
+
+
+
+---------------------------------HEADER HEADER HEADER HEADER HEADER HEADER HEADER HEADER ------------------------------
+
+---------------------------------HEADER HEADER HEADER HEADER HEADER HEADER HEADER HEADER ------------------------------
+
+---------------------------------HEADER HEADER HEADER HEADER HEADER HEADER HEADER HEADER ------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------OTHER CODE TO USE FOR CREATING TABLES                   ------------------------------
+
+CREATE TABLE snow_db.schema1.table1 AS (
+
+SELECT
+	DATE ,
+	CAMPAIGN_ID ,
+	CAMPAIGN_NAME ,
+	AD_SET_NAME AS AD_GROUP_NAME,
+	IMPRESSIONS ,
+	CLICKS ,
+	SPEND ,
+	CONVERSIONS ,
+    NULL AS "conversion_value" ,
+	VIDEO_VIEWS ,
+	ENGAGEMENT_RATE,
+	REACH ,
+	(CLICKS/IMPRESSIONS * 100.0) AS "CTR"
+  FROM DB_SOCIAL.PUBLIC.FACEBOOK_ADS  
+  
+  UNION
+  SELECT	DATE ,
+	CAMPAIGN_ID ,
+	CAMPAIGN_NAME ,
+	AD_GROUP_NAME,
+	IMPRESSIONS ,
+	CLICKS ,
+	COST AS SPEND ,
+	CONVERSIONS ,
+    conversion_value ,
+	NULL AS "VIDEO_VIEWS" ,
+	(CLICKS/IMPRESSIONS) AS ENGAGEMENT_RATE,
+	NULL AS REACH ,
+	CTR
+  FROM DB_SOCIAL.PUBLIC.GOOGLE_ADS 
+    
+  UNION
+    
+  SELECT 	DATE ,
+	CAMPAIGN_ID ,
+	CAMPAIGN_NAME ,
+	ADGROUP_NAME AS AD_GROUP_NAME,
+	IMPRESSIONS ,
+	CLICKS ,
+	COST AS SPEND ,
+	CONVERSIONS ,
+    NULL AS "conversion_value",
+	VIDEO_VIEWS ,
+	(CLICKS/IMPRESSIONS) AS ENGAGEMENT_RATE,
+	NULL AS REACH ,
+	(CLICKS/IMPRESSIONS * 100.0) AS "CTR"
+  FROM DB_SOCIAL.PUBLIC.TIKTOK_ADS 
+);
+
+
+

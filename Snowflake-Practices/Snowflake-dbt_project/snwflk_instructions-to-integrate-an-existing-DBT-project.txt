@@ -1,0 +1,60 @@
+
+
+INETGRATE AN EXISTING DBT PROJECT INTO SNOWFLAKE
+Source: https://www.youtube.com/watch?v=21605Z2eTXs
+
+-----------------------------------------------------------------PRE-REQUISITES:---------------------------------------------------------------
+ 
+
+--------------------In GitHub a repo with te data to work with --------------------
+1 Go to https://github.com/Albertbilu43
+2 Access to the repo
+3 Click teh green "Code" button and copy the HTTPS url: https://github.com/Albertbilu43/Data-Egineering.git
+
+
+
+--------------------In Snowflake an API integration -------------------------------
+Which is an API that we use to integrate Snowflake with GitHub
+
+
+CREATE AN API INTEGRATION IN SNOWFLAKE
+
+1 open a new SQL file and type:
+
+USE ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE API INTEGRATION my_git_api_integration
+        API_PROVIDER = git_https_api
+        API_ALLOWED_PREFIXES = ( 'https://github.com/Albertbilu43' )
+        API_USER_AUTHENTICATION = ( TYPE = SNOWFLAKE_GITHUB_APP )
+        ENABLED = TRUE;
+
+
+--------------------In Snowflake a new Git Worspace -------------------------------
+
+2 CREATE A NEW GIT WORKSPACE IN SNOWFLAKE: Create a Git workspace and use this url https://github.com/Albertbilu43/Data-Egineering.git
+  
+1) Projects/Workspace/ + icon/ Git Workspace
+      
+      Repository URL: https://github.com/Albertbilu43/Data-Egineering.git
+      Workspace name: Data-Egineering                                        # I used the same name of my GitHub repo
+      API integration: MY_GIT_API_INTEGRATION
+      Select the  OAuth2 card
+      Sign in: You click on this to approve the access request and Authorize
+
+      "Create"
+
+2 After this teh dbt project is available n the Snowflake UI 
+  It'll contain an YAML file
+
+3 Inside the dbt project  click on + Add new button/ Add profiles yaml
+  In Snowflake you should create it in teh same project 
+
+4 Once all is done correctly the tool bar at the top would be activated to let you run any dbt command needed.
+
+5 dEPLOY YOUR DBT PROJECT AS A schema level object (On top-right) 
+6 Actions done in the UI can also be done using SQL commands
+7 Schedule runs is also possible
+8 You can do development SQL activites as in any other IDE and then push them to the remote Git repo
+
+

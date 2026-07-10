@@ -1,0 +1,70 @@
+
+
+CREATE A NEW DBT PROJECT INTO SNOWFLAKE
+Source: https://www.youtube.com/watch?v=21605Z2eTXs
+
+-----------------------------------------------------------------PRE-REQUISITES:---------------------------------------------------------------
+ 
+
+--------------------In GitHub a repo with te data to work with --------------------
+
+REMEMBER TO USE REPO NAMES in lowercase and for names composed of multiple words use  underscores to 
+ex. Data-Science  WRONG
+    data_science  RIGHT
+
+1 Go to https://github.com/Albertbilu43
+2 Create a new repo and make sure it includes the README file as it's mandatory to have it for this process. 
+So, to create teh README file you MUST create a Codespace and this automatically creats the README file
+
+3 Click the green "Code" button and copy the HTTPS url: https://github.com/Albertbilu43/Data-Science.git
+
+
+
+--------------------In Snowflake an API integration -------------------------------
+Which is an API that we use to integrate Snowflake with GitHub
+
+
+CREATE AN API INTEGRATION IN SNOWFLAKE
+
+1 open a new SQL file and type:
+
+USE ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE API INTEGRATION my_git_api_integration
+        API_PROVIDER = git_https_api
+        API_ALLOWED_PREFIXES = ( 'https://github.com/Albertbilu43' )
+        API_USER_AUTHENTICATION = ( TYPE = SNOWFLAKE_GITHUB_APP )
+        ENABLED = TRUE;
+
+
+--------------------In Snowflake a new Git Worspace -------------------------------
+
+2 CREATE A NEW GIT WORKSPACE IN SNOWFLAKE: Create a Git workspace and use this url https://github.com/Albertbilu43/data_science.git
+  
+1) Projects/Workspace/ + icon/ Git Workspace
+      
+      Repository URL: https://github.com/Albertbilu43/data_science.git
+      Workspace name: data_science                                        # I used the same name of my GitHub repo
+      API integration: MY_GIT_API_INTEGRATION
+      Select the  OAuth2 card
+      Sign in: You click on this to approve the access request and Authorize
+
+      "Create"
+
+2 After this, in the Snowflake UI, you should have a screen with SQL file, dbt Project, etc. options.
+  Click on the "dbt Project"   
+  Then select the role and warehouse
+  Then select the database and Schema  
+3 The create is created along with the YAML files
+ By default there is a folder "Models" with two dummy models for testing included
+
+ You might need to fix something as in teh video. I open the first model and changed Null for 2, thne closed it
+
+
+3 After Closing the model go to the "Compile" button
+ a) Click in teh dropdown/ switch to "Build"
+ b) Click on Excute
+
+4 Once doen you can delete the dummy models and build your own
+
+

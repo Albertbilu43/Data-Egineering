@@ -55,7 +55,7 @@ CREATE OR REPLACE API INTEGRATION my_git_api_integration
   Click on the "dbt Project"   
   Then select the role and warehouse
   Then select the database and Schema  
-3 The create is created along with the YAML files
+3 The project is created along with the YAML files
  By default there is a folder "Models" with two dummy models for testing included
 
  You might need to fix something as in teh video. I open the first model and changed Null for 2, thne closed it

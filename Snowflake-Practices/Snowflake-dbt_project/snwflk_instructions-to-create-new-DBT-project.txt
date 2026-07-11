@@ -8,7 +8,7 @@ Source: https://www.youtube.com/watch?v=21605Z2eTXs
 
 --------------------In GitHub a repo with te data to work with --------------------
 
-REMEMBER TO USE REPO NAMES in lowercase and for names composed of multiple words use  underscores to 
+REMEMBER TO USE REPO NAMES in lowercase and for names composed of multiple words use  underscores to concatenate them
 ex. Data-Science  WRONG
     data_science  RIGHT
 
